@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <title>University of Oregon Mapping</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!--    Include the reference to the Mapbox JavaScript here in the <head> of the page    -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+
+
+          
+    <!--    Include the reference to the Mapbox CSS here in the <head> of the page    -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+        /* Insert the CSS code here between the <style> tags */
+        
+    body { margin:0; padding:0; }
+     
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+
+    #title { z-index: 9999; 
+        background-color: #007030;
+        color: white;
+        opacity: 80%; 
+        text-align: center;
+        padding-top: 1px;
+        padding-bottom: 1px
+    }
+    h1 {color: #Fee11A}
+        
+    h3 {color: #007030;
+        text-align: center;
+        font-size: 16px}
+    
+    .mapboxgl-popup-content {
+            background-color: #FEE11A;
+
+    }
+    </style>
+  </head>
+
+  <body>
+    <!--  Insert the map div here in the <body> of the page  -->
+    <div id='map'></div>
+    <!--  Insert the tile div here (part V) -->
+    <div id='title'>
+        <h1>The Ballmer Institute<br />for Children's Behavioral Health</h1>
+        <h2>by: Josh Kashinsky</h2>
+ 	</div>
+    <script>
+        // Insert the JavaScript within the <script> tags, within the body   
+        // Start with the Mapbox access token here
+        mapboxgl.accessToken = 'pk.eyJ1Ijoiamthc2giLCJhIjoiY2xnNWY4b3plMDJlazNlbnM5NnZ4dDVtciJ9.dMmKv1gW9S8cYUFzy-uN0Q';
+   
+        // Then initialize the map here
+        var map = new mapboxgl.Map({
+            container: 'map', // id of a div on your page, where the map will be inserted
+            style: 'mapbox://styles/jkash/clg89km6j001g01qhfnv23w45', // stylesheet location
+            center: [-122.6370,45.5711], // starting position [lng, lat] eg. [-122.6788, 45.5212]
+            zoom: 15.5// starting zoom 
+        });
+        
+        // Add popup markers here  (part IV)
+        var popup = new mapboxgl.Popup({ offset: 75, closeOnClick: true, closeButton:false })
+            .setHTML('<h3>UO Portland Campus</h2><p><strong>Home of the <a href="https://childrensbehavioralhealth.uoregon.edu/" target="_blank">Ballmer Institute</a><strong></p>');
+        
+        // Add any other variables such as markers here (part III)
+        var marker = new mapboxgl.Marker({color:'#007030',scale:2})
+            .setLngLat([-122.6370, 45.5695]) // starting position [lng, lat] 45.56959331017078, -122.63704147890387
+            .setPopup(popup) //add the popup with the variable name 'popup' to the map
+            //.togglePopup()
+            .addTo(map);    
+        
+        marker.togglePopup();
+
+
+        
+    
+
+
+        // Add optional advanced "On load" function here
+        
+    </script>
+
+  </body>
+
+</html>
