@@ -4,11 +4,18 @@
     <meta charset='utf-8' />
     <title>Owners vs Renters Map</title>
     <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    
+    <!-- Library supporting responsive layout -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    
+    <!-- Import mapbox api -->
     <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
     <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+    
     <style>
         body { margin:0; padding:0; }
+        
+        /* style for map container */
         #map { position:absolute; top:0; bottom:0; width:100%; }
         
         /*  style for paragraph tags */
@@ -71,10 +78,11 @@
             padding-left: 10px;
        }
 
-
+       /* style for the color of renter symbol in the legend */
        .renter {
             color:#E68310;
        }
+       /* style for the color of renter symbol in the legend */
        .owner{
             color:#52BCA3;
        }
@@ -86,15 +94,13 @@
             font-size: x-large;
             color: white;
        }
-
-        
-        
-        
         
         
     </style>
 </head>
 <body>
+    
+    <!-- container for map -->
     <div id='map'></div>
     
     <!-- Map description box -->
@@ -120,20 +126,25 @@
     </div>
     
     <script>
+        //Default token for jkash profile
         mapboxgl.accessToken = 'pk.eyJ1Ijoiamthc2giLCJhIjoiY2xnNWY4b3plMDJlazNlbnM5NnZ4dDVtciJ9.dMmKv1gW9S8cYUFzy-uN0Q'; 
         
+        // Map object
         var map = new mapboxgl.Map({
             container: 'map', // container id
             style: 'mapbox://styles/jkash/clgpgk999002q01rhfhb240j3', // stylesheet location
+            minZoom: 8, // restrict zoom level to general extent of data
         });
         
+
         // Add zoom and rotation controls to the map.
         const nav = new mapboxgl.NavigationControl();
         map.addControl(nav, 'bottom-right');
         
-        // Add interaction to the description panel
+        // Section below adds interaction to the description panel
         var state = { panelOpen: true };
-
+        
+        //Toggles description panel when chevron is selected
         function panelSelect(e){
             if(state.panelOpen){
                   document.getElementById('descriptionPanel').style.height = '26px';
