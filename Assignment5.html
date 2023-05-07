@@ -1,0 +1,104 @@
+<!-- A Versatile Layout for Full-screen Maps by Andy Cochran
+Andy Cochran 
+From https://medium.com/nyc-planning-digital/a-versatile-layout-for-full-screen-maps-229cec508b22 -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Hello World</title>
+
+    
+    <!-- JavaScript Libraries-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/js/foundation.js"></script>
+
+  
+    <!-- CSS Links -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css" rel="stylesheet" />
+    <link href="VersitileLayout.css" rel="stylesheet" />
+    
+
+    
+</head>
+
+<body>
+
+    <div class="site-header">
+        <strong class="site-title">Points of Interest in Washington, DC</strong>
+    </div>
+
+    <div class="site-main grid-x has-content-open">
+
+        <div class="search-container cell medium-3 large-2">
+            <input type="text" placeholder="Search..." class="search" />
+            <ul class="search-results no-bullet">
+                <li>Arena Stage</li>
+                <li>The Churchkey</li>
+                <li>Capital Bikeshare</li>
+            </ul>
+        </div>
+        
+        <div class="map-container cell medium-auto large-order-2">
+             <!--  ADD iframe here, inside the versitle layout's map container (VI.2.)   -->
+            <iframe src="filter-markers.html" title="Map"></iframe> 
+        </div>
+
+        <!--  Sidebar panel  -->
+        <div class="sidebar cell medium-3 large-2 large-order-1 show-for-medium">
+            <h5>Find something to do!</h5>
+            <p>Use the map to find interesting things to do in our nation's capital. Not sure where to start? Use the search feature to look for activities you are interested in.</p>
+            <h2>Tips:</h2>
+            <ul>
+                <li>Click on an icon on the map to learn more about it.</li>
+                <li>Use the checkboxes to find the category of item you are interest in.</li>
+                <li><a class="content-link" href="#">Learn More About This Map.</a></li>
+                
+            </ul>
+
+            <hr />
+
+        </div>
+
+        <div class="content-close-button-container">
+            <a href="#" class="content-close-button">×</a>
+        </div>
+        
+        <!--  Content panel  -->
+        <div class="content cell large-5 large-order-3">
+            <h2>When was the last time you made a memory in DC?</h2>
+            <p>Imagine this: A captivating morning paddle on the Potomac River. An afternoon spent roaming the halls of a Smithsonian museum. An evening enjoying one of DC’s iconic sports teams. A monumental meal at a Michelin-starred restaurant.</p>
+
+            <p>No matter how you spend your time in the nation’s capital, you're sure to leave with lifelong memories.</p>
+            <p><em>Text courtesy of Washington, DC tourism bureau. Learn more at <a href="https://washington.org">washington.org</a></em></p>
+        </div>
+
+    </div>
+
+    <script>
+       
+        $(document).ready(function() {
+
+            $('.content-close-button').click(function() {
+                $('.content-close-button').hide();
+                $('.content').hide();
+                $('.site-main').removeClass('has-content-open')
+
+                // When the map is resized programmatically, window resize must be triggered so that the map renders in the newly allotted space.
+                window.dispatchEvent(new Event('resize'));
+
+            });
+
+            $('.content-link').click(function() {
+                $('.content-close-button').show();
+                $('.content').show();
+                $('.site-main').addClass('has-content-open')
+                window.dispatchEvent(new Event('resize'));
+            });
+
+        });
+    </script>
+
+</body>
+
+</html>
