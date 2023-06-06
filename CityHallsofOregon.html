@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <title>City Halls of Oregon</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <!--    Include the reference to the Mapbox JavaScript here in the <head> of the page    -->
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.js'></script>
+
+
+          
+    <!--    Include the reference to the Mapbox CSS here in the <head> of the page    -->
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.2.0/mapbox-gl.css' rel='stylesheet' />
+
+    <style>
+        /* Insert the CSS code here between the <style> tags */
+    /* Oregon Blue #002A86
+       Oregon Gold: FFEA0F  
+    */    
+        
+    body { margin:0; padding:0; }
+     
+    #map { position:absolute; left:25%; top:0; bottom:0; width:75%; overflow: hidden; }
+    
+    /* The CSS for the "Home" button  */
+    #gohome {
+        display: inline-block; /* displays over the map */
+        position: relative; /* displays over the map */
+        margin: 0px auto; 
+        width: 30%;
+        height: 40px;
+        padding: 10px;
+        border: 3px;
+        border-radius: 3px; /* rounded corners */
+        border-color: #002A86;
+        font-size: 12px;
+        text-align: center;
+        font-weight: bold;
+        color: #002A86;
+        background: #FFEA0F;
+        cursor:pointer;
+    }
+    
+    /*css for random button */
+    #randomButton {
+        display: inline-block; /* displays over the map */
+        position: relative; /* displays over the map */
+        margin: 0px auto; 
+        width: 30%;
+        height: 40px;
+        padding: 10px;
+        border: 3px;
+        border-radius: 3px; /* rounded corners */
+        font-size: 12px;
+        text-align: center;
+        font-weight: bold;
+        color: #FFEA0F;
+        background: #002A86;
+        cursor:pointer;
+    }
+    
+    .button-row {
+        text-align: center;    
+    }
+        
+        
+    .map-overlay {
+        position: absolute;
+        width: 25%;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        background-color: #002A86;
+        max-height: 100%;
+        overflow: hidden;
+    }    
+        
+        
+    /*  style for items with the class "infoPanel" */
+    .infoPanel {
+        position: absolute;
+        z-index: 2;
+        bottom: 10px;
+        left: 5%;
+        width: 90%;
+        height: 80%;
+        background: rgba(253, 245, 230, 1);
+        transition: width 2s, height 2s;
+        overflow: hidden;
+        border-radius: 7px;
+    }
+    
+    /* style for CityFacts!*/
+    #cityFacts{
+        width: 90%;
+        padding: 10px;
+        background: oldlace;
+        font-size: 24px;
+    }
+    
+    #cityName{
+        text-align: center;
+        font: 40px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    }
+        
+/*    .map-overlay fieldset {
+        display: none;
+        background: #ddd;
+        border: none;
+        padding: 10px;
+        margin: 0;
+    }
+ */
+    .map-overlay input {
+        display: block;
+        border: none;
+        width: 100%;
+        border-radius: 3px;
+        padding: 10px;
+        margin: 0;
+        box-sizing: border-box;
+    }    
+        
+    /*Style for Search */
+    .search .listing {
+        overflow: auto;
+        max-height: 100%;
+    }
+
+    .search .listing > * {
+        display: block;
+        padding: 5px 10px;
+        margin: 0;
+    }
+
+    .search .listing p {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        color: #404;
+        text-decoration: none;
+        cursor:pointer;
+    }
+
+    .search .listing p:last-child {
+        border: none;
+    }
+
+    .search .listing p:hover {
+        background: #f0f0f0;
+    }
+        
+    #beaver{
+        position: absolute;
+        top: 0;
+        height: 100px;
+    }
+    
+    /*Styling for the Facebook Sidebar. There's styling in here for a left sidebar as well to support future conversion */
+    
+    .rounded-rect {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 50px -25px black;
+    }
+
+    .flex-center {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flex-center.left {
+        left: 0px;
+    }
+
+    .flex-center.right {
+        right: 0px;
+    }    
+        
+    .sidebar-content {
+        position: absolute;
+        width: 95%;
+        height: 95%;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 32px;
+        color: gray;
+    }
+
+    .sidebar-toggle {
+        position: absolute;
+        width: 1.3em;
+        height: 1.3em;
+        overflow: visible;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .sidebar-toggle.left {
+        right: -1.5em;
+    }
+
+    .sidebar-toggle.right {
+        left: -1.5em;
+    }
+
+    .sidebar-toggle:hover {
+        color: #0aa1cf;
+        cursor: pointer;
+    }
+
+    .sidebar {
+        transition: transform 1s;
+        z-index: 1;
+        width: 375px;
+        height: 100%;
+    }
+
+    /*
+    The sidebar styling has them "expanded" by default, we use CSS transforms to push them offscreen
+    The toggleSidebar() function removes this class from the element in order to expand it.
+    */
+    .left.collapsed {
+        transform: translateX(-295px);
+    }
+
+    .right.collapsed {
+        transform: translateX(370px);
+    }
+        
+        
+
+    </style>
+  </head>
+
+  <body>
+    <!-- Support for Facebook Embedded Posts. All Hail Meta -->
+    <div id="fb-root"></div>
+    <script async defer src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2"></script>
+      
+      
+    <!--  Insert the map div here in the <body> of the page  -->
+    <div id='map'>
+        <div id="right" class="sidebar flex-center right collapsed">
+            <div class="sidebar-content rounded-rect flex-center">
+            <div id="fb-city" class="fb-post" data-width="350" data-href=""></div>
+                
+                <div id='right-arrow' class="sidebar-toggle rounded-rect right" onclick="toggleSidebar('right')">
+                &#8249;
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Map description box -->
+    <div class="map-overlay">
+      <div id="beaver"><img src="TempBeav.png" alt="illustration of beaver" width="100%"></div>
+        <div class="infoPanel" id="descriptionPanel">
+            <br />
+            <div class ="button-row">
+                <button id='gohome'>Go Home</button> 
+                <button id='randomButton'>Random City</button>
+            </div>
+            <br />
+            <div class="facts-container">
+                <div id="cityName"></div>
+                <div id="cityFacts"></div>
+            </div>
+            <br />
+    <!--        <div class="fb-post" data-width="350" data-href="https://www.facebook.com/cityhallsoforegon/posts/pfbid02WzsmTWVhs8YuB5HekE5xK8rEXaWHYWwbWcSbVFzs6kvPYP7QAigaqTkaNyg5tVxXl?__cft__[0]=AZUnKsCvnINeU9NTqnARgZWf3k6OsF2_ETLYEWWidcbN2BqZZHbOmcqk8qNTxfHj8v2f4XpafvOo2ZD5iCKAVPalWohO4Pu3LImggmcq-WjZquUJIdd5i26aX0HmB3saL-iDVlRtPPteNmxJVAQHToiU1XKewZPz0MrfqCbXUzZZZoajYhUoq-_4ki81hkElogc&__tn__=%2CO%2CP-R"></div>
+    -->        
+            <div class="search"> <!-- search functionality: https://docs.mapbox.com/mapbox-gl-js/example/filter-features-within-map-view/ -->
+                <fieldset>
+                    <!-- This is the search box-->
+                    <input id="feature-filter" type="text" placeholder="Search City by Name or County">
+                </fieldset>
+                <!-- This is the results of search-->
+                <div id="feature-listing" class="listing"></div>
+            </div>
+        </div>
+    </div>
+      
+      
+    <script>
+        // Insert the JavaScript within the <script> tags, within the body   
+        // Start with the Mapbox access token here
+        mapboxgl.accessToken = 'pk.eyJ1Ijoiamthc2giLCJhIjoiY2xnNWY4b3plMDJlazNlbnM5NnZ4dDVtciJ9.dMmKv1gW9S8cYUFzy-uN0Q';
+        
+        //get the facts location
+        var factsDiv = document.getElementById('cityFacts');
+        var factsCity = document.getElementById('cityName');
+        
+        function normalize(string) {
+            return string.trim().toLowerCase();
+        }
+        
+        function toggleSidebar(id) {
+            const elem = document.getElementById(id);
+            // Add or remove the 'collapsed' CSS class from the sidebar element.
+            // Returns boolean "true" or "false" whether 'collapsed' is in the class list.
+            const collapsed = elem.classList.toggle('collapsed');
+            const padding = {};
+            // 'id' is 'right' or 'left'. When run at start, this object looks like: '{left: 300}';
+            padding[id] = collapsed ? 0 : 375; // 0 if collapsed, 300 px if not. This matches the width of the sidebars in the .sidebar CSS class.
+            
+            var toggleDiv = document.getElementById(id + "-arrow");
+            
+            if (collapsed) {
+                toggleDiv.innerHTML = "&#8249;"
+            }
+            else {
+                toggleDiv.innerHTML = "&#8250;"
+            }
+            // Use `map.easeTo()` with a padding option to adjust the map's center accounting for the position of sidebars.
+            map.easeTo({
+                padding: padding,
+                duration: 1000 // In ms. This matches the CSS transition duration property.
+            });
+        };
+        
+        function openSidebar(id) {
+            const elem = document.getElementById(id);
+            const isCollapsed = elem.classList.contains('collapsed');
+            if (isCollapsed){toggleSidebar(id)};          
+        }
+        
+        function closeSidebar(id) {
+            const elem = document.getElementById(id);
+            const isCollapsed = elem.classList.contains('collapsed');
+            if (!isCollapsed){toggleSidebar(id)};          
+        }
+        
+        
+        //May not need yet
+//        map.on('load', () => {
+  //          toggleSidebar('right');
+    //    });
+        
+        //Set the Map Bounds
+        var bounds = [
+            [-127.09103, 41.63267], // Southwest coordinates
+            [-113.82045, 46.67321], // Northeast coordinates
+        ];
+        
+        // Then initialize the map here
+        var map = new mapboxgl.Map({
+            container: 'map', // id of a div on your page, where the map will be inserted
+            style: 'mapbox://styles/jkash/cli7ymk2t00dj01pvdtj28pe6', // stylesheet location
+            center: [-120.4649,44.04948], // starting position [lng, lat] eg. [-122.6788, 45.5212] 44.049486451570104, -120.46496184291894
+            maxZoom: 16,
+            minZoom: 6,
+            zoom: 6, // starting zoom
+            maxBounds: bounds
+        });
+        
+        
+        
+        
+        var featuresList ='';
+        // When the map is loaded, add the city hall data and style
+        map.on('load', function() {
+            
+            //assign the source as the variable 'city' to make it easier to reference in QuerySourceFeatures 
+            map.addSource('city', {
+                'type': 'vector',
+                'url': 'mapbox://jkash.cligud9zr0sln2ip4d02e3tgx-7jf5d' 
+            });
+            
+            map.addLayer({
+                id: 'Cities',
+                type: 'symbol',
+                source: 'city',
+                'source-layer': 'City_Halls', //input your source layer name e.g. 'Owner-Renter-Pop-ca08iw'
+                'layout':{
+                    'icon-image': [
+                        'case',
+                        ['==', ['get','Posted'], 'Yes'], //Change symbol based on the following logic: [<comparison type>,<Value1>,<Value2>] The Get command pulls a field from the layer, in this case gotten
+                        'CityHall-03', //Symbol for icons matching the case above
+                        'CityHall-05' // fallback symbol
+                    ],
+                    'icon-allow-overlap': true,
+                    'icon-size': 1.1,
+                }
+            });
+            
+            //Code below adds All of the features after mapload, for use with RandomButton
+            map.on('render', afterChangeComplete); // warning: this fires many times per second!
+
+            function afterChangeComplete () {
+                if (!map.loaded()) { return } // still not loaded; bail out.
+
+                // now that the map is loaded, it's safe to query the features:
+                featuresList = map.querySourceFeatures('city',{
+                    sourceLayer: 'City_Halls',
+                });               
+
+                map.off('render', afterChangeComplete); // remove this handler now that we're done.
+                //alert(featuresList.length);// Alert for bug testing
+                }    
+            
+
+            
+        });
+        
+
+        // Popup for hovering over icons
+        var popup = new mapboxgl.Popup({
+            closeButton: false,
+            closeOnClick: false
+        });
+        
+        
+        //popup for zooming to city -- currently not used
+        var popup2 = new mapboxgl.Popup({
+            offset: 5
+        });
+            
+        //BEGIN Search Div
+        //This Section Populates the Search Div
+        const filterEl = document.getElementById('feature-filter');
+        const listingEl = document.getElementById('feature-listing');
+
+        function renderListings(features) {
+            const empty = document.createElement('p');
+            // Clear any existing listings
+            listingEl.innerHTML = '';
+            if (features.length) {
+                for (const feature of features) {
+                    const item = document.createElement('p');
+                    const label = `${feature.properties.City} ( ${feature.properties.County})`;
+                    item.innerHTML = label;
+                    //Add this functionality in a sec
+                    item.addEventListener('click', () =>{ 
+                        goToCity(feature);
+                    });
+                    
+                    item.addEventListener('mouseover', () => { 
+                        // Highlight corresponding feature on the map
+                        popup
+                            .setLngLat(feature.geometry.coordinates)
+                            .setText(feature.properties.City)
+                            .addTo(map);
+                    });
+                    listingEl.appendChild(item);
+                }
+
+                // Show the filter input
+                filterEl.parentNode.style.display = 'block';
+            } else if (features.length === 0 && filterEl.value !== '') {
+                empty.textContent = 'No results found';
+                listingEl.appendChild(empty);
+            } else {
+                empty.textContent = 'Search for your city hall!';
+                listingEl.appendChild(empty);
+
+                // Hide the filter input
+                filterEl.parentNode.style.display = 'none';
+
+                // remove features filter Not needed?
+                //map.setFilter('airport', ['has', 'abbrev']); 
+            }
+        }
+        //END Search Div
+        
+        
+        var layerID = 'Cities';
+        
+        
+        //Centralizing functionality for three city selection methods
+        function goToCity(city) {
+            var coordinates = city.geometry.coordinates.slice();
+            
+
+            map.flyTo({
+                center: coordinates,
+                zoom: 15,
+            });
+            
+            var cityName = city.properties.City;
+            var cityYear = city.properties.Inc;
+            var cityPop = city.properties.Pop;
+            
+            var description = cityName + " City Hall";
+            
+            factsCity.innerHTML = cityName;
+            factsDiv.innerHTML = "";
+            factsDiv.innerHTML = "Incorporated:" + cityYear+ "<br />Population (2020):" + cityPop;
+            
+            /* This adds a popup that names the city hall, but isn't locating correctly.
+            map.once('moveend', () => {
+                popup2.setLngLat(coordinates)
+                    .setHTML(description)
+                    .addTo(map);
+            });*/
+            map.once('moveend', () => {
+                /*Populate Sidebar with Facebook Info*/
+                var faceDiv = document.getElementById('fb-city');
+                //rightBar.innerHTML='';
+                
+                //If there is a facebook url for the city, update the facebook html and open the sidebar
+                if (city.properties.facebook.length){ 
+                    postURL = city.properties.facebook;
+
+                    faceDiv.setAttribute('data-href',postURL);
+                    //rightBar.innerHTML = faceDiv;
+                    FB.XFBML.parse();
+                    openSidebar('right');
+                }
+                else {
+                    closeSidebar('right');
+                    faceDiv.setAttribute('data-href','');
+                    FB.XFBML.parse();
+                }
+            });
+        }
+        
+        
+        // Show popup with City Hall Name when cursor is over icon
+        map.on('mousemove', layerID, function (e) {
+        
+           // Change the cursor style as a UI indicator.
+           map.getCanvas().style.cursor = 'pointer';
+    
+           
+            
+           var coordinates = e.lngLat;
+           var description = e.features[0].properties.City;
+    
+            // Populate the popup and set its coordinates
+            // based on the feature found.
+            popup.setLngLat(coordinates)
+                .setHTML(description)
+                .addTo(map);
+        });
+        // Remove popup when cursor leaves icon 
+        map.on('mouseleave', layerID, function () {
+            map.getCanvas().style.cursor = '';
+            popup.remove();
+        });
+        
+        //When someone clicks on a city hall icon, trigger the go to city actions.
+        map.on('click', layerID, function (e) {
+            goToCity(e.features[0]);
+        });
+
+        //Listener for the Go Home Button
+        document.getElementById('gohome').addEventListener('click', function () {
+            map.flyTo({center: [-120.4649,44.04948], zoom: 6.5});
+            factsDiv.innerHTML = "";
+            factsCity.innerHTML ="";
+            map.once('moveend', () => {
+                /*Populate Sidebar with Facebook Info*/
+                var faceDiv = document.getElementById('fb-city');
+                //rightBar.innerHTML='';
+                closeSidebar('right');
+                faceDiv.setAttribute('data-href','');
+                FB.XFBML.parse();
+            
+            });
+        
+        
+        });
+        
+        // Function to generate random number
+        function randomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min) + min);
+        }
+        
+        
+        //Listener for random button
+        document.getElementById('randomButton').addEventListener('click', function () {
+            featureIndex = 0;
+            
+            //var featuresList = map.querySourceFeatures('city',{sourceLayer: 'City_Halls_of_Oregon'});//don't need now that this is populated on load
+            featureIndex = randomNumber(0,featuresList.length);
+            selectedFeature = featuresList[featureIndex];
+            
+            goToCity(selectedFeature);
+        });        
+        
+        //See if someone has typed in searchbox
+        filterEl.addEventListener('keyup', (e) => {
+            const value = normalize(e.target.value);
+
+            // Filter visible features that match the input value.
+            const filtered = [];
+            for (const feature of featuresList) {
+                const name = normalize(feature.properties.City);
+                const code = normalize(feature.properties.County);
+                if (name.includes(value) || code.includes(value)) {
+                    filtered.push(feature);
+                }
+            }
+
+            // Populate the sidebar with filtered results
+            renderListings(filtered);
+
+
+            
+        });        
+        
+    
+
+
+
+        
+    </script>
+
+  </body>
+
+</html>
