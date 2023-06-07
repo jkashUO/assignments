@@ -60,18 +60,19 @@
         cursor:pointer;
     }
     
+    /*Puts the buttons next to each other */
     .button-row {
         text-align: center;    
     }
         
-        
+    /*Sets up functionality for the left hand info panel */    
     .map-overlay {
         position: absolute;
         width: 25%;
         top: 0;
         bottom: 0;
         left: 0;
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        font: 12px/20px Arial, Helvetica, sans-serif;
         background-color: #002A86;
         max-height: 100%;
         overflow: hidden;
@@ -86,7 +87,7 @@
         left: 5%;
         width: 90%;
         height: 80%;
-        background: rgba(253, 245, 230, 1);
+        background: rgba(255, 245, 238, 1);
         transition: width 2s, height 2s;
         overflow: hidden;
         border-radius: 7px;
@@ -96,10 +97,10 @@
     #cityFacts{
         width: 90%;
         padding: 10px;
-        background: oldlace;
+        background: rgba(255, 245, 238, 1);
         font-size: 24px;
     }
-    
+            
     #cityName{
         text-align: center;
         font: 40px 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -113,6 +114,7 @@
         margin: 0;
     }
  */
+    /*styling for the search box*/
     .map-overlay input {
         display: block;
         border: none;
@@ -137,7 +139,7 @@
 
     .search .listing p {
         border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-        color: #404;
+        color: #002A86;
         text-decoration: none;
         cursor:pointer;
     }
@@ -147,13 +149,16 @@
     }
 
     .search .listing p:hover {
-        background: #f0f0f0;
+        background: rgba(255,234,15,0.2);
     }
-        
+    
+    /*stlying for the beaver image*/
     #beaver{
         position: absolute;
-        top: 0;
+        top: 10px;
+        left: 10px;
         height: 100px;
+        text-align: center;
     }
     
     /*Styling for the Facebook Sidebar. There's styling in here for a left sidebar as well to support future conversion */
@@ -187,7 +192,7 @@
         font-size: 32px;
         color: gray;
     }
-
+        
     .sidebar-toggle {
         position: absolute;
         width: 1.3em;
@@ -196,6 +201,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        background: rgba(255, 245, 238, 1);
     }
 
     .sidebar-toggle.left {
@@ -207,7 +213,7 @@
     }
 
     .sidebar-toggle:hover {
-        color: #0aa1cf;
+        color: #FFEA0F;
         cursor: pointer;
     }
 
@@ -216,8 +222,20 @@
         z-index: 1;
         width: 375px;
         height: 100%;
+        background: rgba(255, 245, 238, 1);
     }
 
+    #no-facebook {
+        display: none;
+        font-size: 24px;
+    }
+    
+    #intro-text {
+        display: block;
+        font-size: 16px;
+        padding: 10px;
+    }
+        
     /*
     The sidebar styling has them "expanded" by default, we use CSS transforms to push them offscreen
     The toggleSidebar() function removes this class from the element in order to expand it.
@@ -230,7 +248,10 @@
         transform: translateX(370px);
     }
         
-        
+    /* CSS for the popups */
+    .mapboxgl-popup-content {
+        background: rgba(255, 245, 238, 0.9);
+    }        
 
     </style>
   </head>
@@ -245,6 +266,8 @@
     <div id='map'>
         <div id="right" class="sidebar flex-center right collapsed">
             <div class="sidebar-content rounded-rect flex-center">
+                <div id="intro-text"><h1>Welcome to City Halls of Oregon!</h1><br/>This is a project by Josh and Eliza Kashinsky to visit every incorporated city in Oregon and take a picture of their city hall. Visited cities are indicated by blue icons, unvisited cities are in gray. Learn more about a city by: <ol><li>Clicking on the icon</li><li>Typing in the search box and selecting a city from the list</li><li>Clicking the 'Random City' button</li></ol><br/>Sources: Oregon Secretary of State Blue Book, 2020 Census, Wikimedia Commons (Beaver Image). City Hall pictures and information text by Eliza Kashinsky, CC-BY</div>
+            <div id="no-facebook">No Facebook Post For This City</div>
             <div id="fb-city" class="fb-post" data-width="350" data-href=""></div>
                 
                 <div id='right-arrow' class="sidebar-toggle rounded-rect right" onclick="toggleSidebar('right')">
@@ -255,7 +278,7 @@
     </div>
     <!-- Map description box -->
     <div class="map-overlay">
-      <div id="beaver"><img src="TempBeav.png" alt="illustration of beaver" width="100%"></div>
+      <div id="beaver"><img src="beaver.png" alt="image of beaver from oregon flag" width="90%"></div>
         <div class="infoPanel" id="descriptionPanel">
             <br />
             <div class ="button-row">
@@ -267,9 +290,7 @@
                 <div id="cityName"></div>
                 <div id="cityFacts"></div>
             </div>
-            <br />
-    <!--        <div class="fb-post" data-width="350" data-href="https://www.facebook.com/cityhallsoforegon/posts/pfbid02WzsmTWVhs8YuB5HekE5xK8rEXaWHYWwbWcSbVFzs6kvPYP7QAigaqTkaNyg5tVxXl?__cft__[0]=AZUnKsCvnINeU9NTqnARgZWf3k6OsF2_ETLYEWWidcbN2BqZZHbOmcqk8qNTxfHj8v2f4XpafvOo2ZD5iCKAVPalWohO4Pu3LImggmcq-WjZquUJIdd5i26aX0HmB3saL-iDVlRtPPteNmxJVAQHToiU1XKewZPz0MrfqCbXUzZZZoajYhUoq-_4ki81hkElogc&__tn__=%2CO%2CP-R"></div>
-    -->        
+            <br /> 
             <div class="search"> <!-- search functionality: https://docs.mapbox.com/mapbox-gl-js/example/filter-features-within-map-view/ -->
                 <fieldset>
                     <!-- This is the search box-->
@@ -283,18 +304,23 @@
       
       
     <script>
-        // Insert the JavaScript within the <script> tags, within the body   
         // Start with the Mapbox access token here
         mapboxgl.accessToken = 'pk.eyJ1Ijoiamthc2giLCJhIjoiY2xnNWY4b3plMDJlazNlbnM5NnZ4dDVtciJ9.dMmKv1gW9S8cYUFzy-uN0Q';
         
-        //get the facts location
+        //Declare some variables we use later in multiple functions
         var factsDiv = document.getElementById('cityFacts');
         var factsCity = document.getElementById('cityName');
+        var noFaceDiv = document.getElementById('no-facebook');
+        var introDiv = document.getElementById('intro-text');
+        var layerID = 'Cities';
+        var featuresList ='';
         
+        //This function helps the search feature search text regardless of capitilization. It shouldn't need to live up here, but somehow the functionality doesn't work if it doesn't. 
         function normalize(string) {
             return string.trim().toLowerCase();
         }
         
+        //opens or closes the sidebar for facebook, depending on whether it is open or closed. Another function that wants to be higher than it should be
         function toggleSidebar(id) {
             const elem = document.getElementById(id);
             // Add or remove the 'collapsed' CSS class from the sidebar element.
@@ -306,6 +332,7 @@
             
             var toggleDiv = document.getElementById(id + "-arrow");
             
+            //This if statement swaps the chevron
             if (collapsed) {
                 toggleDiv.innerHTML = "&#8249;"
             }
@@ -319,23 +346,22 @@
             });
         };
         
+        //If the sidebar is closed, opens it. If open, do nothing. You lazy function.
         function openSidebar(id) {
             const elem = document.getElementById(id);
             const isCollapsed = elem.classList.contains('collapsed');
-            if (isCollapsed){toggleSidebar(id)};          
+            if (isCollapsed){toggleSidebar(id)};
+            noFaceDiv.style.display = "none";
         }
         
+        //If the sidebar is open, close it. If closed, do nothing. What are you being paid for?
         function closeSidebar(id) {
             const elem = document.getElementById(id);
             const isCollapsed = elem.classList.contains('collapsed');
-            if (!isCollapsed){toggleSidebar(id)};          
+            if (!isCollapsed){toggleSidebar(id)};
+            noFaceDiv.style.display = "block";
         }
         
-        
-        //May not need yet
-//        map.on('load', () => {
-  //          toggleSidebar('right');
-    //    });
         
         //Set the Map Bounds
         var bounds = [
@@ -343,11 +369,11 @@
             [-113.82045, 46.67321], // Northeast coordinates
         ];
         
-        // Then initialize the map here
+        // Then initialize the map here. Finally.
         var map = new mapboxgl.Map({
             container: 'map', // id of a div on your page, where the map will be inserted
             style: 'mapbox://styles/jkash/cli7ymk2t00dj01pvdtj28pe6', // stylesheet location
-            center: [-120.4649,44.04948], // starting position [lng, lat] eg. [-122.6788, 45.5212] 44.049486451570104, -120.46496184291894
+            center: [-120.4649,44.04948], // starting position [lng, lat] eg. [-122.6788, 45.5212] 
             maxZoom: 16,
             minZoom: 6,
             zoom: 6, // starting zoom
@@ -357,7 +383,7 @@
         
         
         
-        var featuresList ='';
+
         // When the map is loaded, add the city hall data and style
         map.on('load', function() {
             
@@ -371,11 +397,11 @@
                 id: 'Cities',
                 type: 'symbol',
                 source: 'city',
-                'source-layer': 'City_Halls', //input your source layer name e.g. 'Owner-Renter-Pop-ca08iw'
+                'source-layer': 'City_Halls', 
                 'layout':{
                     'icon-image': [
                         'case',
-                        ['==', ['get','Posted'], 'Yes'], //Change symbol based on the following logic: [<comparison type>,<Value1>,<Value2>] The Get command pulls a field from the layer, in this case gotten
+                        ['==', ['get','Posted'], 'Yes'], //Change symbol based on the following logic: [<comparison type>,<Value1>,<Value2>] The Get command pulls a field from the layer, in this case Posyed
                         'CityHall-03', //Symbol for icons matching the case above
                         'CityHall-05' // fallback symbol
                     ],
@@ -384,7 +410,7 @@
                 }
             });
             
-            //Code below adds All of the features after mapload, for use with RandomButton
+            //Code below adds All of the features after mapload, for use with RandomButton. If this isn't here, will not consistently load all features
             map.on('render', afterChangeComplete); // warning: this fires many times per second!
 
             function afterChangeComplete () {
@@ -400,7 +426,7 @@
                 }    
             
 
-            
+           toggleSidebar('right'); 
         });
         
 
@@ -416,21 +442,24 @@
             offset: 5
         });
             
-        //BEGIN Search Div
-        //This Section Populates the Search Div
+        //BEGIN Search Div - This Section Populates the Search Div
+        
         const filterEl = document.getElementById('feature-filter');
         const listingEl = document.getElementById('feature-listing');
-
+        
+        //This function creates the list of cities
         function renderListings(features) {
             const empty = document.createElement('p');
             // Clear any existing listings
             listingEl.innerHTML = '';
+            //Make sure we actually have some results
             if (features.length) {
+                //For each city in the result
                 for (const feature of features) {
-                    const item = document.createElement('p');
-                    const label = `${feature.properties.City} ( ${feature.properties.County})`;
+                    const item = document.createElement('p'); //A paragraph element
+                    const label = `${feature.properties.City} (${feature.properties.County})`; //Populate it with the city and county name
                     item.innerHTML = label;
-                    //Add this functionality in a sec
+                    //Whens someone clicks on a city in the list, go there
                     item.addEventListener('click', () =>{ 
                         goToCity(feature);
                     });
@@ -457,42 +486,43 @@
                 // Hide the filter input
                 filterEl.parentNode.style.display = 'none';
 
-                // remove features filter Not needed?
-                //map.setFilter('airport', ['has', 'abbrev']); 
             }
         }
         //END Search Div
-        
-        
-        var layerID = 'Cities';
-        
-        
+
         //Centralizing functionality for three city selection methods
         function goToCity(city) {
+            
+            //Get the coordinates of the city
             var coordinates = city.geometry.coordinates.slice();
             
-
+            //Fly to that location
             map.flyTo({
                 center: coordinates,
                 zoom: 15,
             });
             
+            //Get properties to fill in the city facts on the left sidebar
             var cityName = city.properties.City;
             var cityYear = city.properties.Inc;
             var cityPop = city.properties.Pop;
             
-            var description = cityName + " City Hall";
-            
             factsCity.innerHTML = cityName;
             factsDiv.innerHTML = "";
-            factsDiv.innerHTML = "Incorporated:" + cityYear+ "<br />Population (2020):" + cityPop;
+            factsDiv.innerHTML = "<span style='font-size: 18px;'>Incorporated: </span>" + cityYear+ "<br /><span style='font-size: 18px;'>Population (2020): </span>" + cityPop;
             
             /* This adds a popup that names the city hall, but isn't locating correctly.
+            var description = cityName + " City Hall";
             map.once('moveend', () => {
                 popup2.setLngLat(coordinates)
                     .setHTML(description)
                     .addTo(map);
             });*/
+            
+            //Hides the intro text. We only need to do this once, in the future put a test on it
+            introDiv.style.display = "none";
+            
+            //Wait until the fly movement ends to extend the sidebar, otherwise it looks weird
             map.once('moveend', () => {
                 /*Populate Sidebar with Facebook Info*/
                 var faceDiv = document.getElementById('fb-city');
@@ -503,10 +533,10 @@
                     postURL = city.properties.facebook;
 
                     faceDiv.setAttribute('data-href',postURL);
-                    //rightBar.innerHTML = faceDiv;
-                    FB.XFBML.parse();
+                    FB.XFBML.parse(); //This is needed to refresh the FB link
                     openSidebar('right');
                 }
+                //If there is no facebook url for the city, close the sidebar and blank the section
                 else {
                     closeSidebar('right');
                     faceDiv.setAttribute('data-href','');
@@ -521,9 +551,7 @@
         
            // Change the cursor style as a UI indicator.
            map.getCanvas().style.cursor = 'pointer';
-    
-           
-            
+
            var coordinates = e.lngLat;
            var description = e.features[0].properties.City;
     
@@ -533,6 +561,7 @@
                 .setHTML(description)
                 .addTo(map);
         });
+        
         // Remove popup when cursor leaves icon 
         map.on('mouseleave', layerID, function () {
             map.getCanvas().style.cursor = '';
@@ -549,8 +578,9 @@
             map.flyTo({center: [-120.4649,44.04948], zoom: 6.5});
             factsDiv.innerHTML = "";
             factsCity.innerHTML ="";
+            introDiv.style.display = "none";
             map.once('moveend', () => {
-                /*Populate Sidebar with Facebook Info*/
+                /*Clear Sidebar of Facebook info*/
                 var faceDiv = document.getElementById('fb-city');
                 //rightBar.innerHTML='';
                 closeSidebar('right');
@@ -558,15 +588,12 @@
                 FB.XFBML.parse();
             
             });
-        
-        
         });
         
-        // Function to generate random number
+        // Function to generate random number used by random button
         function randomNumber(min, max) {
             return Math.floor(Math.random() * (max - min) + min);
         }
-        
         
         //Listener for random button
         document.getElementById('randomButton').addEventListener('click', function () {
@@ -579,7 +606,7 @@
             goToCity(selectedFeature);
         });        
         
-        //See if someone has typed in searchbox
+        //Listener to see if someone has typed in searchbox
         filterEl.addEventListener('keyup', (e) => {
             const value = normalize(e.target.value);
 
@@ -599,14 +626,8 @@
 
             
         });        
-        
-    
 
-
-
-        
     </script>
-
   </body>
 
 </html>
